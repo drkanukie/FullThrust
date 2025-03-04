@@ -1,0 +1,379 @@
+/* * Style sheet for the CSS 2.0 specification		
+ * for the Full Thrust Ship Registry*/
+BODY  {
+	color:			      #000000;
+	background-color:	  #FFF;
+	font-family:	      "avant garde", "continuum light", futura, arial, helvetica, sans-serif;
+	font-size:		      16px;
+	margin : 	          0;
+	margin-left: 	      0;
+	margin-right:		  0;
+	box-sizing: border-box;
+	}
+
+B  {font-weight : bold;}
+
+H1, H2, H3, H4, H5, H6 {
+	font-weight:	normal;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+  }
+H1 {font-size: 32px;}
+H2 {font-size: 24px;}
+H3 {font-size: 18px;}
+H4 {font-size: 16px;}
+H5 {font-size: 14px;}
+H6 {font-size: 12px;}
+H6.nav {font-size: 10px;}
+
+  
+P  {
+	text-indent : 0em;
+	font-family : "avant garde", "continuum light", futura, arial, helvetica, sans-serif;
+	}
+P.fixed  {
+	text-indent : 0em;
+	font-family : monospaced;
+	}
+P.lone  {text-indent : 0em;}
+P.prose1  {
+	text-indent : 0em;
+	margin-left : .75in;
+	}
+P.prose2  {
+	text-indent : 0em;
+	margin-left : 1.25in;
+	}
+P.s8	{font-size : 8px;}
+P.s12	{font-size : 12px;}
+P.s14 {font-size : 14px;}
+P.s18 {font-size : 18px;}
+P.s24 {font-size : 24px;}
+P.s28 {font-size : 28px;}
+P.s48 {font-size : 48px;}
+p.ft  {color: #000000;}
+p.ds  {color: #993300;}
+p.sg  {color: #003300;}
+P.2h12 {
+  font-size : 12px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  }
+P.sw8 {
+	font-size: 8px;
+	font-family: SteelWolf;
+	}
+
+PRE  {
+	font-family : courier, "courier new", monospace;
+	font-size : 13px;
+	}
+
+TR, TD, TH, OL, UL, LI  {
+	font-family : "avant garde", futura, arial, sans-serif;
+	font-size : 13px;
+	}
+
+TR.shade0 {background-color: #ffffff;}
+TR.shade1 {background-color: #ccccff;}
+TR.shade2 {background-color: #cccccc;}
+TR.shade3 {background-color: #99ccff;}
+
+TH.shade0 {background-color: #ffffff;}
+TH.shade1 {background-color: #ccccff;}
+TH.shade2 {background-color: #cccccc;}
+TH.shade3 {background-color: #99ccff;}
+
+TD.s8  {
+	font-family : "avant garde", futura, arial, sans-serif;
+	font-size : 8px;
+	}
+TD.shade0 {background-color: #ffffff;}
+TD.shade1 {background-color: #ccccff;}
+TD.shade2 {background-color: #cccccc;}
+TD.shade3 {background-color: #99ccff;}
+TD.fma_yw {
+	color:				#000000;
+	background-color: 	#ffff00;
+	}
+TD.fma_gn {
+	color:				#000000;
+	background-color: 	#00ff00;
+	}
+TD.fma_bl {
+	color:				#000000;
+	background-color: 	#99ccff;
+	}
+TD.fma_or {
+	color:				#000000;
+	background-color: #ff9933;
+	}
+TD.fma_rd {
+	color:				#000000;
+	background-color: #ff3333;
+	}
+
+
+
+A  			{color : #0000ff;}
+A:visisted  {color : #000066;}
+A:active  	{color : #000099;}
+A:hover  	{color : #ff0000;}
+A.fb		{
+			color :      #333366;
+			font-weight: bold;
+			}
+A.nav		{color : #0000ff;}
+
+span.s8  	{font-size : 8px;}
+span.s10  	{font-size : 10px;}
+span.s12  	{font-size : 12px;}
+span.s14  	{font-size : 14px;}
+span.s18  	{font-size : 18px;}
+span.s24  	{font-size : 24px;}
+span.s28  	{font-size : 28px;}
+span.s36  	{font-size : 36px;}
+span.s48  	{font-size : 48px;}
+span.indent  {
+	margin-left : .25in;
+	text-indent : 2em;
+	padding-left: .25in;
+	}
+span.red 		{color: #ff0000;}
+span.cannon	{
+	color : #006600;
+	font-weight: bold;
+	}
+span.sw {font-family: SteelWolf;}
+span.sf 	{
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs36 	{
+	font-size: 36px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs32 {
+	font-size: 32px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs28 {
+	font-size: 28px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs24 {
+	font-size: 24px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs18 {
+	font-size: 18px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs14 {
+	font-size: 14px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+span.hs12 {
+	font-size: 12px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+ span.hs10 {
+	font-size: 10px;
+	font-family:	"continuum medium", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+ span.hs8 {
+	font-size: 8px;
+	font-family:	"continuum light", "avant garde", 
+								futura, arial, helvetica, sans-serif;
+	}
+ 
+	
+span.ftsr1k {
+  color:			        #00ffff;
+	background-color:		#000000;
+	font-family:	      "avant garde", "continuum light", futura, arial, helvetica, sans-serif;
+	font-size:		      10px;
+	}
+
+span.ftsr2k {
+	color:			        #00ffff;
+	background-color:		#000000;
+	font-family:	      book, bookman, "century schoolbook", "ludica bright", "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+
+span.ftsr3k {
+	color:			        #00ffff;
+	background-color:		#000000;
+	font-family:	      "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+	
+span.ftsr1b {
+  color:						  #ffffff;
+	background-color:   #003366;
+	font-family:	      "avant garde", "continuum light", futura, arial, helvetica, sans-serif;
+	font-size:		      10px;
+	}
+
+span.ftsr2b {
+	color:			        #ffffff;
+	background-color:		#003366;
+	font-family:	      book, bookman, "century schoolbook", "ludica bright", "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+
+span.ftsr3b {
+	color:			        #ffffff;
+	background-color:		#003366;
+	font-family:	      "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+	
+span.ftsr1w {
+  color:			        #000000;
+	background-color:		#ffffff;
+	font-family:	      "avant garde", "continuum light", futura, arial, helvetica, sans-serif;
+	font-size:		      10px;
+	}
+
+span.ftsr2w {
+	color:			        #000000;
+	background-color:		#ffffff;
+	font-family:	      book, bookman, "century schoolbook", "ludica bright", "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+
+span.ftsr3w {
+	color:			        #000000;
+	background-color:		#ffffff;
+	font-family:	      "times roman", "new times roman", serif;
+	font-size:		      10px;
+	}
+span.fma_yw {
+	color:				#000000;
+	background-color: 	#ffff00;
+	}
+span.fma_gn {
+	color:				#000000;
+	background-color: 	#00ff00;
+	}
+span.fma_bl {
+	color:				#000000;
+	background-color: 	#99ccff;
+	}
+span.fma_or {
+	color:				#000000;
+	background-color: #ff9933;
+	}
+span.fma_rd {
+	color:				#000000;
+	background-color: #ff3333;
+	}
+	
+.readOnly {
+	border: 1px solid #CCC;
+	background-color: #EEE;
+}
+
+.main {
+	padding:32px;
+}
+
+.formLayout {
+	/* border: 1px solid red; */
+}
+
+.formLayout li {
+	/* border: 1px solid green; */
+}
+
+.formLayout li {
+	padding: 8px 0;
+}
+
+.formLayout,
+.innerFormLayout{
+	list-style: none;
+}
+
+.formLayout label {
+  display: inline-block;
+  width: 120px;
+  /* border: 1px solid red; */
+}
+
+
+input
+{
+	height: 24px;
+}
+label {
+	padding: 8px;
+	font-weight: bold;
+}
+
+select
+{
+	height: 30px;
+}
+
+.systems th {
+	text-align: left;
+	/* border: 1px solid red; */
+}
+
+.actions {
+	margin-left: 32px;
+}
+
+.actions td {
+	text-align: center;
+	padding-right: 24px;
+}
+
+.actions td input {
+	width: 120px;
+	height: 32px;
+}
+
+
+textarea {
+  padding: 8px;
+}
+
+.error {
+  color: #C00;
+}
+
+.sidebar {
+	width: 72px;
+}
+.layout {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: 0;
+	box-sizing: border-box;
+}
+
+.layout td,
+.layout th,
+.layout tr,
+.layout img {
+	padding: 0;
+	border: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+
+	
+

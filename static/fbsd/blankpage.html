@@ -1,0 +1,75 @@
+
+<!-- saved from url=(0111)https://web.archive.org/web/20010721064136id_/http://www.primenet.com/~reynol/gaming/war/ao/fbsd/blankpage.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Armageddon Outfitter Worksheet</title></head>
+<body bgcolor="#FFFFFF" text="#000000" marginwidth="0" marginheight="0">
+<form method="POST" name="ShipDesignForm" action="">
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<tbody><tr valign="bottom"><td colspan="2"><font face="sans-serif" size="+2"><b>Ship Design Parameters</b></font></td><td align="right"><font face="sans-serif" size="-1"><font size="-1"><b>Mass</b></font></font></td><td align="right"><font face="sans-serif" size="-1"><font size="-1"><b>Points</b></font></font></td></tr>
+<tr><td colspan="4"><hr size="2" noshade=""></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Description</b></font></td><td><font face="sans-serif" size="-1"><input type="TEXT" name="Ship_Desc" size="25" value="" onchange="parent.Recalc(this);"></font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Ship Type</b></font></td><td><font face="sans-serif" size="-1"><select name="Ship_ShipType" onchange="parent.Recalc(this);">
+<option value="0" selected="">Military
+</option><option value="1">Merchant/Civilian
+</option></select>
+</font></td><td align="right"><font face="sans-serif" size="-1"></font></td><td align="right"><font face="sans-serif" size="-1"></font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Hull Displacement</b></font></td><td><font face="sans-serif" size="-1"><input type="TEXT" name="Ship_Mass" size="5" value="85" onchange="parent.Recalc(this);"></font></td><td align="right"><font face="sans-serif" size="-1"><hr width="12" size="1" noshade=""></font></td><td align="right"><font face="sans-serif" size="-1">85</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Hull Strength</b></font></td><td><font face="sans-serif" size="-1"><select name="Ship_HullStrength" onchange="parent.Recalc(this);">
+<option value="0">Fragile
+</option><option value="1">Weak
+</option><option value="2" selected="">Average
+</option><option value="3">Strong
+</option><option value="4">Super
+</option></select>
+</font></td><td align="right"><font face="sans-serif" size="-1">26</font></td><td align="right"><font face="sans-serif" size="-1">52</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Hull Armor</b></font></td><td><font face="sans-serif" size="-1"><input type="TEXT" name="Ship_Armor" size="5" value="0" onchange="parent.Recalc(this);"></font></td><td align="right"><font face="sans-serif" size="-1">0</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Streamlining</b></font></td><td><font face="sans-serif" size="-1"><select name="Ship_Streamlining" onchange="parent.Recalc(this);">
+<option value="0" selected="">None
+</option><option value="1">Partial
+</option><option value="2">Full
+</option></select>
+</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Main Drive Thrust</b></font></td><td><font face="sans-serif" size="-1"><input type="TEXT" name="Ship_Thrust" size="5" value="4" onchange="parent.Recalc(this);"></font></td><td align="right"><font face="sans-serif" size="-1">17</font></td><td align="right"><font face="sans-serif" size="-1">34</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>FTL Capable</b></font></td><td><font face="sans-serif" size="-1"><input type="CHECKBOX" name="Ship_FtlCapable" checked="" onclick="parent.Recalc(this);"> &nbsp; Tow Capacity <input type="TEXT" name="Ship_FtlTowCap" size="5" value="0" onchange="parent.Recalc(this);"></font></td><td align="right"><font face="sans-serif" size="-1">9</font></td><td align="right"><font face="sans-serif" size="-1">18</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>Active Sensors</b></font></td><td><font face="sans-serif" size="-1"><select name="Ship_ActiveSensors" onchange="parent.Recalc(this);">
+<option value="0" selected="">Basic
+</option><option value="1">Enhanced
+</option><option value="2">Superior
+</option></select>
+</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td></tr>
+<tr valign="top"><td><font face="sans-serif" size="-1"><b>ECM</b></font></td><td><font face="sans-serif" size="-1"><select name="Ship_ECM" onchange="parent.Recalc(this);">
+<option value="0" selected="">None
+</option><option value="1">Individual
+</option><option value="2">Area-Effect
+</option></select>
+</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td><td align="right"><font face="sans-serif" size="-1">0</font></td></tr>
+</tbody></table>
+<hr size="2" noshade="">
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<tbody><tr valign="top"><td><font face="sans-serif" size="-1"><b>New System</b></font></td><td><font face="sans-serif" size="-1"><select name="System_AddType">
+<option value="0" selected="">ADFC - Area Defense Firecon
+</option><option value="1">Beam Battery
+</option><option value="2">Cargo/Passenger Space
+</option><option value="3">Fighter Bay
+</option><option value="4">FCS - Fire Control System
+</option><option value="5">Hangar Bay
+</option><option value="6">Mine Layer
+</option><option value="7">Mine Sweeper
+</option><option value="8">Missile (MT type)
+</option><option value="9">Needle Beam
+</option><option value="10">Ortillery System
+</option><option value="11">PDS - Point-Defense System
+</option><option value="12">Pulse Torpedo Launcher
+</option><option value="13">Screen System
+</option><option value="14">SML - Salvo Missile Launcher
+</option><option value="15">SMM - Salvo Missile Magazine
+</option><option value="16">SMP - Submunitions Pack
+</option><option value="17">SMR - Salvo Missile Rack
+</option><option value="18">Cloaking Field
+</option><option value="19">Nova Cannon (Spinal Mount)
+</option><option value="20">Reflex Field
+</option><option value="21">Wave Gun
+</option></select>
+</font></td><td><font face="sans-serif" size="-1"><input type="BUTTON" name=" System_Add" value="Add" onclick="parent.Recalc(this.form.System_AddType);"></font></td></tr></tbody></table>
+</form>
+
+</body></html>

@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/TR/xhtml1">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>FTSR - Submit type 2.5 Full Thrust Design (v0.15h)</title>
+  <link rel="STYLESHEET" href="ftsr/ftsr_1w.css" type="text/css">
+  <meta http-equiv="x-ua-compatible" content="IE=9">
+</head>
+
+<body>
+
+  <table class="layout" >
+    <tbody>
+      <tr><td colspan="2" class="test" ><img src="ftsr/ftsr_topbar.jpg" width="576" height="72" border="0" alt="The Full Thrust Ship Registry" ></td></tr>
+      <tr><td class="sidebar" background="ftsr/ftsr_sidebar.jpg"><div class="sidebar"></div></td>
+        <!-- Main Page in td -->
+        <td valign="top" width="100%">
+          <!-- main page -->
+
+
+          <!-- Main Content -->
+          <a name="top" id="top"></a>
+          <table width="95%">
+            <tbody>
+              <tr valign="top">
+                <td align="left" width="110">
+                  <a href="#">
+                    <img src="ftsr/ftsr_button.gif"
+                      alt="The Full Thrust Ship Registry" width="108" height="36" border="0" align="left"></a>
+                </td>
+                <td align="left">
+                  <p class="s8">
+                    Created: 1998.09.01<br>
+                    Updated: 2021.1.5<br>
+                  </p>
+                </td>
+                <td width="200" align="right">
+                  <div align="right">
+                    <img src="ftsr/ftfb_button.gif" width="88"
+                      height="31" border="0" alt="Full Thrust - Fleet Book">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+
+
+          <script language="VBScript">
+
+            dim gShipMass, gHullMass, gStreamMass, gFTLMass, gMDMass, gArmorMass
+            dim gSensorMass, gScreenMass, gFCSMass, gADFCMass, gPDSMass
+            dim gSysMass(25)
+            dim bodyText
+
+            '****************************************************
+            function notEmpty(checkField)
+            if isNull(checkField) or checkField = "" or isEmpty(checkField) then
+            notEmpty = False
+  else
+            notEmpty = True
+            end if
+end function
+
+'****************************************************
+            function trueEmpty(checkField)
+            if isNull(checkField) or checkField = "" or isEmpty(checkField) then
+            trueEmpty = True
+  else
+            trueEmpty = False
+            end if
+end function
+
+'**************************************************
+            '*
+            '* VBScript rounds 0.5 to the nearest EVEN number.
+            '* This function is to correct to numeric rounding
+            '*
+            '**************************************************
+            function trueRound(myVar)
+            dim temp
+            temp = round(myVar)
+            if ((myVar - temp) = 0.5) then
+            temp = temp + 1
+            end if
+    trueRound = temp
+end function
+
+
+'**************************************************
+            function roundUp(myVar)
+            dim temp
+            temp = round(myVar)
+            if (myVar > temp) then
+            temp = temp + 1
+            end if
+    roundUp = temp
+end function
+
+
+'****************************************************
+            sub checkShip_onClick
+            checkShip()
+            end sub
+
+            '****************************************************
+            sub submitShip_onClick
+            checkShip()
+            printShip()
+            end sub
+
+            '****************************************************
+            sub quickFill_onclick
+              dim i
+              dim txt
+
+              for i = 1 to 10
+  	            txt = document.shipForm.elements(i).value
+                if trueEmpty(txt) then
+                  document.shipForm.elements(i).value = "TBD"
+                end if
+              next 
+			  document.shipForm.elements(6).value = 1 '* Tech
+            end sub
+
+            '--------- Print Ship---------------------------------------------------------
+            sub printShip
+            dim i, j
+            'dim bodyText 'global
+            dim br, crlf
+            dim mailstr
+
+            bodyText = ""
+            br = "<br>"
+            'crlf = (chr(13)+chr(10))
+            crlf = vbCrLf
+
+            bodyText = "<pre>"
+            if document.shipForm.elements(17).value = 0 then
+            bodyText = bodyText & document.shipForm.elements(1).value & "-S class " & document.shipForm.elements(2).value & crlf
+  else
+            bodyText = bodyText & document.shipForm.elements(1).value & " class " & document.shipForm.elements(2).value & crlf
+            end if
+  if notEmpty(document.shipForm.elements(5).value) then
+            bodyText = bodyText & "<a href=mailto:" & document.shipForm.elements(5).value & ">" & document.shipForm.elements(4).value & "</a> " & document.shipForm.elements(5).value & crlf
+  else
+            bodyText = bodyText & document.shipForm.elements(4).value & crlf
+            end if
+  bodyText = bodyText & "Tech: " ' & document.shipForm.elements(6).value
+            if document.shipForm.elements(6).value <> "" and not isNull(document.shipForm.elements(6).value) then
+            'bodyText = bodyText & " " & document.shipForm.elements(6).value
+            select case document.shipForm.elements(6).value
+      case 1: bodyText = bodyText & "Human"
+      case 2: bodyText = bodyText & "Kra'Vak"
+      case 3: bodyText = bodyText & "Sa'Vasku"
+      case 4: bodyText = bodyText & "Phalon"
+      case 5: bodyText = bodyText & document.shipForm.elements(7).value
+            end select
+            end if
+  bodyText = bodyText & " (FB)" & crlf
+  bodyText = bodyText & "Govt: " & document.shipForm.elements(9).value
+            if document.shipForm.elements(10).value <> "" and not isNull(document.shipForm.elements(10).value) then
+            bodyText = bodyText & "   " & document.shipForm.elements(10).value
+            end if
+  bodyText = bodyText & crlf
+  bodyText = bodyText & "Mass: " & document.shipForm.elements(11).value & crlf
+            bodyText = bodyText & "Cost: " & document.shipForm.elements(12).value
+            if document.shipForm.elements(13).value <> "" and not isNull(document.shipForm.elements(13).value) then
+            bodyText = bodyText & " (" & document.shipForm.elements(13).value & ")"
+            end if
+  bodyText = bodyText & crlf
+  bodyText = bodyText & "Clas: " & document.shipForm.elements(2).value & " (" & document.shipForm.elements(3).value & ")" & crlf
+            bodyText = bodyText & "Strm: "
+            select case (document.shipForm.elements(16).value)
+    case 1: bodyText = bodyText & "None" & crlf
+    case 2: bodyText = bodyText & "Partial" & clrf
+    case 3: bodyText = bodyText & "Full" & crlf
+            end select
+            bodyText = bodyText & "FTL:&nbsp;&nbsp;"
+            select case (document.shipForm.elements(17).value)
+    case 0: bodyText = bodyText & "None" & crlf
+    case 1: bodyText = bodyText & "Std." & crlf
+    case 2: bodyText = bodyText & "Tug" & " (Towing capacity: " & document.shipForm.elements(18).value & " mass)" & crlf
+            end select
+            bodyText = bodyText & "MD:&nbsp;&nbsp;&nbsp;" & document.shipForm.elements(19).value & crlf
+            bodyText = bodyText & "Armr: " & document.shipForm.elements(20).value & crlf
+            bodyText = bodyText & "Hull: " & document.shipForm.elements(14).value
+            bodyText = bodyText & "  ("
+            select case (document.shipForm.elements(15).value)
+    case 1: bodyText = bodyText & "Military" 
+    case 2: bodyText = bodyText & "Merchant"
+            end select
+            bodyText = bodyText & ")" & crlf
+            bodyText = bodyText & "Damg: " '& document.shipForm.elements(21).value & "; "
+            bodyText = bodyText & document.shipForm.elements(22).value & "/"
+            bodyText = bodyText & document.shipForm.elements(23).value & "/"
+            bodyText = bodyText & document.shipForm.elements(24).value & "/"
+            bodyText = bodyText & document.shipForm.elements(25).value & crlf
+            bodyText = bodyText & "Crew: " & document.shipForm.elements(26).value & crlf
+            bodyText = bodyText & "Sens: "
+            select case (document.shipForm.elements(27).value)
+    case 0: bodyText = bodyText & "Std." 
+    case 1: bodyText = bodyText & "Enhanced" 
+    case 2: bodyText = bodyText & "Superior"
+            end select
+            bodyText = bodyText & crlf
+            bodyText = bodyText & "Systems" & crlf
+            if notEmpty(document.shipForm.elements(28).value) and document.shipForm.elements(28).value > 0 then
+            bodyText = bodyText & "  " & document.shipForm.elements(28).value & " x Screen" & crlf
+            end if
+  if notEmpty(document.shipForm.elements(29).value) and document.shipForm.elements(29).value > 0 then
+            bodyText = bodyText & "  " & document.shipForm.elements(29).value & " x FCS" & crlf
+            end if
+  if notEmpty(document.shipForm.elements(30).value) and document.shipForm.elements(30).value > 0 then
+            bodyText = bodyText & "  " & document.shipForm.elements(30).value & " x ADFC" & crlf
+            end if
+  if notEmpty(document.shipForm.elements(31).value) and document.shipForm.elements(31).value > 0 then
+            bodyText = bodyText & "  " & document.shipForm.elements(31).value & " x PDS" & crlf
+            end if
+  for i = 1 to 15
+    j = (i * 5) + 27
+            if notEmpty(document.shipForm.elements(j).value)  then
+            if document.shipForm.elements(j).value > 0 then
+            bodyText = bodyText & "&nbsp;&nbsp;"
+            bodyText = bodyText & slot2text(i) & crlf
+            end if
+    end if
+  next
+  bodyText = bodyText & "Notes:" & crlf
+            bodyText = bodyText & "&nbsp;&nbsp;" & document.shipForm.txaNotes.value & crlf
+            bodyText = bodyText & crlf & crlf
+            'printMass(bodyText)
+            printMass
+            bodyText = bodyText & crlf & crlf
+            bodyText = bodyText & "</pre>" & crlf
+            mailstr = ""
+            bodyText = bodyText & crlf & crlf & "Please copy the above summary and "
+            bodyText = bodyText & "<a href=mailto:admin@fullthrust.net"
+            if notEmpty(document.shipForm.elements(5).value) then
+            mailstr = mailstr & "?cc=" & document.shipForm.elements(5).value
+            end if
+  mailstr = mailstr & "?subject=FTSR+Ship+Submission+"
+  if notEmpty(document.shipForm.elements(1).value) then
+            mailstr = mailstr & document.shipForm.elements(1).value & "+class+" & document.shipForm.elements(3).value
+            end if
+  bodyText = bodyText & urlsafe(mailstr) & "&quot;>E-mail</a> me at "
+  mailstr = ""
+            bodyText = bodyText & "<a href=mailto:admin@fullthrust.net"
+            if notEmpty(document.shipForm.elements(5).value) then
+            mailstr = "?cc=" & document.shipForm.elements(5).value
+            end if
+  mailstr = mailstr & "?subject=FTSR+Ship+Submission+"
+  if notEmpty(document.shipForm.elements(1).value) then
+            mailstr = mailstr & document.shipForm.elements(1).value & "+class+" & document.shipForm.elements(3).value
+            end if
+  bodyText = bodyText & urlsafe(mailstr)
+  bodyText = bodyText & "&quot;>admin@fullthrust.net</a>."
+
+
+            'if document.shipForm.elements(5).value <> "" and not isNull(document.shipForm.elements(5).value) then
+            'document.location.href = "mailto:admin@fullthrust.net?cc=" & document.shipForm.elements(5).value & "?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'else
+            'document.location.href = "mailto:admin@fullthrust.net?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'end if
+
+            'if document.shipForm.elements(5).value <> "" and not isNull(document.shipForm.elements(5).value) then
+            'document.shipForm.target = "mailto:admin@fullthrust.net?cc=" & document.shipForm.elements(5).value & "?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'else
+            'document.shipForm.target = "mailto:admin@fullthrust.net?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'end if
+
+            'if notEmpty(document.shipForm.elements(5).value) then
+            'document.shipForm.action = "mailto:admin@fullthrust.net?cc=" & document.shipForm.elements(5).value & "?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'else
+            'document.shipForm.action = "mailto:admin@fullthrust.net?subject=FTSR Ship Submission" & document.shipForm.elements(1).value & "?body=" & bodyText
+            'end if
+
+            'document.shipForm.method = "post"
+            'document.shipForm.submit
+
+            if notEmpty(document.shipForm.txaErrorNotes.value) = false then
+            document.writeln bodyText
+  else
+            alert "There are still errors in the design"
+            end if
+end sub
+
+
+            '-----------------Print Mass---------------------------------------------------
+            sub printMass
+            dim i, j
+            dim br, crlf, rowOpen, rowClose, rowCloseNm, cellChange
+            dim mailstr
+
+            br = "<br />"
+            crlf = (chr(13) + chr(10))
+            spacer = "     "
+            rowOpen = "<tr><td>"
+            cellchange = "</td><td align=right>"
+            rowClose = "</td></tr>"
+            rowCloseNm = "</td><td>&nbsp;</td></tr>"
+
+            bodyText = bodyText & "<table>" & crlf
+            if document.shipForm.elements(17).value = 0 then
+            bodyText = bodyText & rowOpen & document.shipForm.elements(1).value & "-S class " & document.shipForm.elements(2).value & rowCloseNm & crlf
+  else
+            bodyText = bodyText & rowOpen & document.shipForm.elements(1).value & " class " & document.shipForm.elements(2).value & rowCloseNm & crlf
+            end if
+  bodyText = bodyText & rowOpen & "Mass: " & document.shipForm.elements(11).value & rowCloseNm & crlf
+  bodyText = bodyText & rowOpen & "Cost: " & document.shipForm.elements(12).value & rowCloseNm & crlf
+            bodyText = bodyText & rowOpen & "Hull: " & document.shipForm.elements(14).value
+            bodyText = bodyText & cellChange & gHullMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "Strm: "
+            select case (document.shipForm.elements(16).value)
+    case 1: bodyText = bodyText & "None"  
+    case 2: bodyText = bodyText & "Partial" 
+    case 3: bodyText = bodyText & "Full"
+            end select
+            bodyText = bodyText & cellChange & gStreamMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "FTL:&nbsp;&nbsp;"
+            select case (document.shipForm.elements(17).value)
+    case 0: bodyText = bodyText & "None"
+    case 1: bodyText = bodyText & "Std."
+    case 2: bodyText = bodyText & "Tug" & " (Towing capacity: " & document.shipForm.elements(18).value & " mass)"
+            end select
+            bodyText = bodyText & cellChange & gFTLMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "MD:&nbsp;&nbsp;&nbsp;" & document.shipForm.elements(19).value
+            bodyText = bodyText & cellChange & gMDMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "Armr: " & document.shipForm.elements(20).value
+            bodyText = bodyText & cellChange & gArmorMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "Sens: "
+            select case (document.shipForm.elements(27).value)
+    case 0: bodyText = bodyText & "Std." 
+    case 1: bodyText = bodyText & "Enhanced" 
+    case 2: bodyText = bodyText & "Superior"
+            end select
+            bodyText = bodyText & cellChange & gSensorMass & rowClose & crlf
+            bodyText = bodyText & rowOpen & "Systems" & rowClose & crlf
+            if notEmpty(document.shipForm.elements(28).value) and document.shipForm.elements(28).value > 0 then
+            bodyText = bodyText & rowOpen & "&nbsp;&nbsp;" & document.shipForm.elements(28).value & " x Screen"
+            bodyText = bodyText & cellChange & gScreenMass & rowClose & crlf
+            end if
+  if notEmpty(document.shipForm.elements(29).value) and document.shipForm.elements(29).value > 0 then
+            bodyText = bodyText & rowOpen & "&nbsp;&nbsp;" & document.shipForm.elements(29).value & " x FCS"
+            bodyText = bodyText & cellChange & gFCSMass & rowClose & crlf
+            end if
+  if notEmpty(document.shipForm.elements(30).value) and document.shipForm.elements(30).value > 0 then
+            bodyText = bodyText & rowOpen & "&nbsp;&nbsp;" & document.shipForm.elements(30).value & " x ADFC"
+            bodyText = bodyText & cellChange & gADFCMass & rowClose & crlf
+            end if
+  if notEmpty(document.shipForm.elements(31).value) and document.shipForm.elements(31).value > 0 then
+            bodyText = bodyText & rowOpen & "&nbsp;&nbsp;" & document.shipForm.elements(31).value & " x PDS"
+            bodyText = bodyText & cellChange & gPDSMass & rowClose & crlf
+            end if
+  for i = 1 to 15
+    j = (i * 5) + 27
+            if notEmpty(document.shipForm.elements(j).value)  then
+            if document.shipForm.elements(j).value > 0 then
+            bodyText = bodyText & rowOpen & "&nbsp;&nbsp;"
+            bodyText = bodyText & slot2text(i)
+            bodyText = bodyText & cellChange & gSysMass(i) & rowClose & crlf
+            end if
+    end if
+  next
+  bodyText = bodyText & "</table>"
+            'alert bodyText
+            end sub
+
+            '-------------URL Safe---------------------------------------------------------
+            function urlsafe(instr)
+            dim i
+            dim inlength
+            dim outstr, tempstr
+
+            inlength = len(instr)
+            outstr = ""
+            for i = 1 to inlength
+    tempstr = mid(instr, i, 1)
+            if tempstr = " " then
+            outstr = outstr & "+"
+    else
+            outstr = outstr & tempstr
+            end if
+  next
+  'document.writeln "instr: " & instr & "     len: " & inlength & "     outstr: " & outstr & "    tempstr: " & tempstr 
+            urlsafe = outstr
+            end function
+
+
+'-----------------Slot to Text--------------------------------------------------
+            function slot2text(slot)
+            dim out, tempout, crlf
+            dim temp, temp2, temp3, i, k, j, m, n
+
+            crlf = (chr(13) + chr(10))
+            j = (slot * 5) + 27
+            temp = document.shipForm.elements(j).value
+            if temp <> "" and not isNull(temp) then
+            out = document.shipForm.elements(j).value + " x "
+            select case document.shipForm.elements(j + 1).value
+      case 1: out = out + "Class-" & document.shipForm.elements(j + 3).value & " beam " + arc2text(j + 2)
+      case 2: out = out + "Class-3 beam " + arc2text(j + 2)
+      case 3: out = out + "Class-2 beam " + arc2text(j + 2)
+      case 4: out = out + "Class-1 beam " + arc2text(j + 2)
+      case 5: out = out + "Salvo Missile Launcher " + arc2text(j + 2)
+      case 6: out = out + "Salvo Missile Magazine (" + document.shipForm.elements(j + 3).value + " Std. Salvos, " + document.shipForm.elements(j + 4).value + " ER Salvos)"
+      case 7: if notEmpty(document.shipForm.elements(j + 4).value) then
+            out = out + "ER Salvo Missile Rack " + arc2text(j + 2)
+          else
+            out = out + "Salvo Missile Rack " + arc2text(j + 2)
+            end if
+      case 8: out = out + "Submunitions Pack " + arc2text(j + 2)
+      case 9: out = out + "Needle Beam " + arc2text(j + 2)
+      case 10: out = out + "Pulse Torpedo " + arc2text(j + 2)
+      case 11: out = out + "Nova Cannon " + arc2text(j + 2)
+      case 12: out = out + "Wave Gun " + arc2text(j + 2)
+      case 13: out = out + "Minelayer " + document.shipForm.elements(j + 3).value
+      case 14: out = out + "Minesweeper"
+      case 15: out = out + "MT Missile"
+      case 16: out = out + "Reflex Field"
+      case 17: out = out + "Cloaking Field"
+      case 18: out = out + "Ortillery System"
+      case 19: out = out + "Fighter Bay"
+      case 20: out = out + "Hanger Bay"
+      case 21: out = out + "Cargo/Passenger Space "
+            temp3 = document.shipForm.elements(j + 4).value
+            temp = temp3 / 4
+            temp2 = (temp3 / 4) - (temp3 \ 4)
+            if temp2 > 0 then
+            m = int(temp) + 1
+              else
+            m = temp3 \ 4
+            end if
+              m = m & ""
+              tempout = tempout + m + "/"
+            m = 0
+            if temp2 > .25 then
+            m = int(temp) + 1 
+              else
+            m = temp3 \ 4
+            end if
+              m = m & ""
+              tempout = tempout + m + "/"
+            m = 0
+            if temp2 > .50 then
+            m = int(temp) + 1
+              else
+            m = temp3 \ 4
+            end if
+              m = m & ""
+              tempout = tempout + m + "/"
+            m = 0
+            if temp2 > .75 then
+            m = int(temp) + 1
+              else
+            m = temp3 \ 4
+            end if
+              m = m & ""
+              tempout = tempout + m
+            m = 0
+            out = out + tempout & crlf
+      case 22: out = out + "ECM - Individual"
+          case 23: out = out + "ECM - Area"
+          case 24: out = out + "Ortillery " + arc2text(j + 2)
+            end select
+    else
+            out = ""
+            end if
+  slot2text = out
+end function
+
+'------------Arc to Text-------------------------------------------------------
+            function arc2text(elm)
+            dim temp
+            temp = document.shipForm.elements(elm).value
+            select case temp
+    case 1: arc2text = "(F)"
+    case 2: arc2text = "(FS)"
+    case 3: arc2text = "(FA)"
+    case 4: arc2text = "(A)"
+    case 5: arc2text = "(AP)"
+    case 6: arc2text = "(FP)"
+    case 7: arc2text = "(F,FS)"
+    case 8: arc2text = "(FS,AS)"
+    case 9: arc2text = "(AS,A)"
+    case 10: arc2text = "(A,AP)"
+    case 11: arc2text = "(AP,FP)"
+    case 12: arc2text = "(FP,F)"
+    case 13: arc2text = "(FP,F,FS)"
+    case 14: arc2text = "(F,FS,AS)"
+    case 15: arc2text = "(FS,AS,A)"
+    case 16: arc2text = "(AS,A,AP)"
+    case 17: arc2text = "(A,AP,FP)"
+    case 18: arc2text = "(AP,FP,F)"
+    case 19: arc2text = "(FP,F,FS,AS)"
+    case 20: arc2text = "(F,FS,AS,A)"
+    case 21: arc2text = "(FS,AS,A,AP)"
+    case 22: arc2text = "(AS,A,AP,FP)"
+    case 23: arc2text = "(A,AP,FP,F)"
+    case 24: arc2text = "(AP,FP,F,FS)"
+    case 25: arc2text = "(AP,FP,F,FS,AS)"
+    case 26: arc2text = "(FP,F,FS,AS,A)"
+    case 27: arc2text = "(F,FS,AS,A,AP)"
+    case 28: arc2text = "(FS,AS,A,AP,FP)"
+    case 29: arc2text = "(AS,A,AP,FP,F)"
+    case 30: arc2text = "(A,AP,FP,F,FS)"
+    case 31: arc2text = "(All)"  
+    case else: arc2text = "*error in arc*"
+            end select
+            end function
+
+'-------------Check Ship--------------------------------------------------------
+            sub checkShip
+            dim mass, wMass, pers
+            dim errorNotes
+
+            wMass = 0
+            pers = 0
+            errorNotes = ""
+            mass = document.shipForm.elements(11).value
+            errorNotes = reallyCheckShip(mass, wMass, pers, errorNotes)
+            end sub
+
+            '-----------Really Check Ship--------------------------------------------------
+            function reallyCheckShip(mass, wMass, pers, errorNotes)
+            dim errors, tempErrFlag
+            dim crlf
+            dim temp, temp2, i, j, k
+            dim cost, costF, tech, hull, stream, ftl, md, armor
+            dim damageT, damage1, damage2, damage3, damage4, crew, screens
+            dim fcs, adfc, pds
+            dim amt, slot, arc, ammo, bay
+            dim reportNotes
+            'crlf = (chr(13) + chr(10))
+            crlf = vbCrLf
+            cost = 0
+            costF = 0
+            errors = 0
+            wMass = 0
+            pers = 0
+            reportNotes = ""
+            document.shipForm.elements(13).value = ""  '* Cost w/Fighters
+
+            if mass = "" or isNull(mass) then
+            mass = 3
+            document.shipForm.elements(11).value = mass  '* Mass
+    else
+            if mass < 3 then
+            mass = 3
+            document.shipForm.elements(11).value = mass  '* Mass
+            end if
+    end if
+  gShipMass = mass
+  cost = mass
+            reportNotes = reportNotes + "Mass Cost: " & mass & crlf
+            tech = document.shipForm.elements(6).value
+            temp = document.shipForm.elements(9).value  '* Gov't Abrev
+            if trueEmpty(temp) then
+            document.shipForm.elements(9).value = "---"  '* Gov't Abrev
+            errorNotes = errorNotes & "Government was not indicated. It has been set to independant (---)" & crlf
+            end if
+  hull = document.shipForm.elements(14).value  '* Hull
+            'alert "Hull " & hull
+            if trueEmpty(hull) then
+            hull = 1
+            document.shipForm.elements(14).value = 1  '* Hull
+  else
+            hull = hull + 0
+            end if
+  tempErrFlag = 0
+  if hull < (mass / 10) then
+            hull = roundUp(mass / 10)
+            document.shipForm.elements(14).value = hull  '* Hull
+            tempErrFlag = 1
+            end if
+  if tempErrFlag = 1 then
+            errorNotes = errorNotes & "Hull must be a minimum of 10% of mass. Mass set at 10%." & crlf
+            document.shipForm.elements(14).value = hull
+            tempErrFlag = 0
+            end if
+    if hull >= mass then
+            'hull = mass - 1  ' * Removed due to looping for Low Mass
+      errorNotes = errorNotes & "Hull cannot be equal to or greater than the mass of the ship." & crlf
+    end if
+    wMass = wMass + hull    
+    gHullMass = hull
+            cost = cost + (hull * 2)
+            reportNotes = reportNotes + "Hull Cost: " & (hull * 2) & crlf
+            stream = document.shipForm.elements(16).value
+            temp = 0
+            if notEmpty(stream) then
+            if stream > 1 then
+            temp = trueRound(mass * ((stream - 1) / 10))
+            wMass = wMass + temp
+            gStreamMass = temp
+            cost = cost + (2 * temp)
+            reportNotes = reportNotes + "Stream Cost: " & (2 * temp) & crlf
+            pers = pers + ((stream - 1) * 10)
+            end if  
+    end if                              
+  ftl = document.shipForm.elements(17).value
+    if ftl > 0 then
+            temp = trueRound(mass / 10)
+            wMass = wMass + temp
+            gFTLMass = temp
+            cost = cost + (2 * temp)
+            reportNotes = reportNotes + "FTL Cost: " & (2 * temp) & crlf
+            pers = pers + 10
+            end if
+    if ftl = 2 then  '* Tug
+            temp = trueRound(document.shipForm.elements(18).value / 5) '* 20%
+            if temp < 1 then
+            temp = 1
+            end if
+      wMass = wMass + temp
+      gFTLMass = temp
+            cost = cost + (2 * temp)
+            reportNotes = reportNotes + "Tug Cost: " & (2 * temp) & crlf
+            'pers = pers + ((temp / mass) * 100)
+            end if  
+  md = document.shipForm.elements(19).value
+    if md = "" or  isNull(md) then
+            md = 1
+            document.shipForm.elements(19).value = 1
+            end if
+    temp = trueRound(md * (mass * .05))
+    if temp < 1 then
+            temp = 1
+            end if
+    wMass = wMass + temp
+    gMDMass = temp
+            cost = cost + (temp * 2)
+            reportNotes = reportNotes + "MD Cost: " & (2 * temp) & crlf
+            pers = pers + (md * 5)
+            armor = document.shipForm.elements(20).value
+            if armor = "" or isNull(armor) then
+            armor = 0
+            document.shipForm.elements(20).value = 0
+            end if
+    wMass = wMass + armor
+    gArmorMass = armor
+            cost = cost + (armor * 2)
+            reportNotes = reportNotes + "Armor Cost: " & (2 * armor) & crlf
+            damageT = hull
+            document.shipForm.elements(21).value = damageT
+            temp = damageT / 4
+            temp2 = (damageT / 4) - (damageT \ 4)
+            if temp2 > 0 then
+            damage1 = int(temp) + 1
+      else
+            damage1 = damageT \ 4
+            end if
+      document.shipForm.elements(22).value = damage1
+      if temp2 > .25 then
+            damage2 = int(temp) + 1 
+      else
+            damage2 = damageT \ 4
+            end if
+      document.shipForm.elements(23).value = damage2
+      if temp2 > .50 then
+            damage3 = int(temp) + 1
+      else
+            damage3 = damageT \ 4
+            end if
+      document.shipForm.elements(24).value = damage3
+      if temp2 > .75 then
+            damage4 = int(temp) + 1
+      else
+            damage4 = damageT \ 4
+            end if
+      document.shipForm.elements(25).value = damage4
+  if document.shipForm.elements(15).value = 1 then
+            crew = mass / 20
+            temp = mass \ 20
+            temp2 = crew - temp
+            if temp2 = 0 then
+            crew = temp
+        else
+            crew = temp + 1
+            end if
+  else
+              crew = mass / 50
+            temp = mass \ 50
+            temp2 = crew - temp
+            if temp2 = 0 then
+            crew = temp
+        else
+            crew = temp + 1
+            end if
+  end if
+    document.shipForm.elements(26).value = crew
+  select case document.shipForm.elements(27).value  '* Sensors
+    case 0: temp = 0
+            temp2 = 0
+    case 1: temp = 1
+            temp2 = 15
+    case 2: temp = 2
+            temp2 = 30
+    case default: temp = 0
+            temp2 = 0
+            end select
+            wMass = wMass + temp
+            gSensorMass = temp
+            cost = cost + temp2
+            reportNotes = reportNotes + "Sensor Cost: " & temp2 & crlf
+            screens = document.shipForm.elements(28).value
+            if screens = "" or  isNull(screens) then
+            screens = 0
+            document.shipForm.elements(28).value = screens
+    else
+            if screens > 2 then
+            screens = 2
+            document.shipForm.elements(28).value = screens
+            errorNotes = errorNotes + "Screens may not have a value greater than 2. Screens set to 2." & crlf
+      else
+            if screens < 0 then
+            screens = 0
+            document.shipForm.elements(28).value = screens
+            errorNotes = errorNotes + "Screens must be 0, 1, or 2. Screens set to 0." & crlf
+            end if
+      end if 
+    end if
+    temp = trueRound(screens * (0.05 * mass))
+    'alert "Screen Mass: " & temp
+            temp2 = 3 * screens
+            if temp > temp2 then
+            wMass = wMass + temp
+            gScreenMass = temp
+            cost = cost + (temp * 3)
+            reportNotes = reportNotes + "Screen Cost: " & (temp * 3) & crlf
+    else
+            wMass = wMass + temp2
+            gScreenMass = temp2
+            cost = cost + (temp2 * 3)
+            reportNotes = reportNotes + "Screen Cost: " & (temp2 * 3) & crlf
+            end if
+    pers = pers + (screens * 5)
+  fcs = document.shipForm.elements(29).value
+            if fcs = "" or isNull(fcs) then
+            fcs = 1
+    else
+            fcs = fcs + 0
+            end if
+    if fcs < 0 then
+            fcs = 1
+            end if
+    document.shipForm.elements(29).value = fcs
+    wMass = wMass + fcs
+            gFCSMass = fcs
+            cost = cost + (fcs * 4)
+            reportNotes = reportNotes + "FCS Cost: " & (fcs * 4) & crlf
+            adfc = document.shipForm.elements(30).value
+            if adfc = "" or isNull(adfc) then
+            adfc = 0
+            document.shipForm.elements(30).value = adfc
+            end if
+    wMass = wMass + (adfc * 2)
+    gADFCMass = (adfc * 2)
+            cost = cost + (adfc * 8)
+            reportNotes = reportNotes + "ADFC Cost: " & (adfc * 8) & crlf
+            pds = document.shipForm.elements(31).value
+            if pds = "" or isNull(pds) then
+            pds = 0
+            document.shipForm.elements(31).value = pds
+            end if
+    wMass = wMass + pds
+    gPDSMass = pds
+            cost = cost + (pds * 3)
+            reportNotes = reportNotes + "PDS Cost: " & (pds * 3) & crlf
+            '---Slots Section---
+            for i = 1 to 15
+    j = (i * 5) + 27
+            amt = document.shipForm.elements(j).value
+            if amt <> "" and not isNull(amt) then
+            if amt > 0 then
+            slot = document.shipForm.elements(j + 1).value
+            if slot <> "" and not isNull(slot) then
+            arcss = document.shipForm.elements(j + 2).value
+            ammo = document.shipForm.elements(j + 3).value
+            bay = document.shipForm.elements(j + 4).value
+            temp = calcSlots(mass, wMass, cost, costF, errorNotes, amt, slot, arcss, ammo, bay, i, pers, gSysMass(i))
+            end if
+        end if
+      end if
+    next
+    if costF > 0 then
+            document.shipForm.elements(13).value = cost + costF
+    else
+            costF = 0
+            document.shipForm.elements(13).value = ""
+            end if
+  '---Reporting Section---
+  if not notEmpty(document.shipForm.elements(1).value) then
+            errorNotes = errorNotes & "Ship must be named" & crlf
+            end if
+  if not notEmpty(document.shipForm.elements(2).value) then
+            errorNotes = errorNotes & "Ship class (Destroyer, Battleship, etc.) must be entered." & crlf
+            end if
+  if not notEmpty(document.shipForm.elements(3).value) then
+            errorNotes = errorNotes & "Abbreviation for ship class (DD, BB, SDN, etc.) must be entered." & crlf
+            end if
+  if not notEmpty(document.shipForm.elements(4).value) then
+            errorNotes = errorNotes & "Your name must be entered as the designer." & crlf
+            end if
+  
+  if (mass - wMass) < 0 then
+            errorNotes = errorNotes + "Components (Mass: " & wMass & ") will not fit in ship (Mass: " & mass & ")." & crlf
+            end if
+  if pers >= 100 then
+            errorNotes = errorNotes + "Components based on percentage of ship's mass equal or exceed 100%." & crlf
+            end if
+  'errorNotes = errorNotes + reportNotes
+  document.shipForm.elements(109).value = wMass
+            document.shipForm.elements(110).value = mass - wMass
+
+            document.shipForm.txaErrorNotes.value = errorNotes
+            document.shipForm.elements(11).value = mass
+            document.shipForm.elements(12).value = cost
+            end function 'reallyCheckShip
+
+            '--------------Low Mass--------------------------------------------------------
+            sub lowMass_onClick
+            dim errorNotes, errors, errorNotesCuml
+            dim crlf
+            dim temp, temp2, i, j, k
+            dim mass, wMass, dMass
+            dim pers
+            dim pass
+
+            'crlf = (chr(13) + chr(10))
+            crlf = vbCrLf
+            errors = 0
+            errorNotes = ""
+            wMass = 0
+            dmass = -1 'deficet mass -- ship mass - working mass
+            pers = 0
+            pass = 0
+
+            mass = 3
+            do while ((dMass < 0) and(pers < 100))
+            'mass = mass + 1
+            document.shipForm.elements(11).value = mass
+            pers = 0
+            errorNotes = reallyCheckShip(mass, wMass, pers, errorNotes)
+            document.shipForm.elements(109).value = wMass
+            document.shipForm.elements(110).value = mass - wMass
+            dMass = mass - wMass
+            'if (dMass < -10) then
+            'mass = mass + 4
+            'end if
+            if (dMass < 0) then
+            errorNotes = ""
+            mass = wMass
+            end if
+  loop
+  errorNotes = reallyCheckShip(mass, wMass, pers, errorNotes)
+            'errorNotesCuml = errorNotesCuml & errorNotes & crlf
+
+            end sub 'lowmass
+
+            '-----------------Calc Slots---------------------------------------------------
+            function calcSlots(sMass, wMass, cost, costF, errorNotes, amt, slot, arcs, ammo, bay, slotNo, pers, sysMass)
+            dim temp, flag
+            dim temp2
+            dim crlf
+            dim reportNotes
+
+
+            'crlf = chr(13) + chr(10)
+            crlf = vbCrLf
+            sysMass = 0
+            temp = 0
+            temp2 = 0
+            reportNotes = ""
+
+            select case slot
+    case 1: if arcs <> "" and not isNull(arcs) then              'Class 4+ Battery
+            if arcs > 0 then
+            if arcs < 7 then '1 arcs
+            temp = 0 'extra arcs
+                else if (6 < arcs) and(arcs < 13) then '2 arcss
+            temp = 1 'extra arcs
+                else if (12 < arcs) and(arcs < 19) then
+            temp = 2 'extra arcs
+                else if (18 < arcs) and(arcs < 25) then
+            temp = 3 'extra arcs
+                else if (24 < arcs) and(arcs < 31) then
+            temp = 4 'extra arcs
+                else
+            temp = 5 'extra arcs
+            end if end if end if end if end if
+                if (notEmpty(ammo) and(ammo > 3)) then
+            temp2 = amt * (2 ^ (ammo - 1))
+            temp2 = temp2 + ((trueRound(.25 * temp2)) * temp)
+            'errorNotes = errorNotes & "temp2: " & temp2 & crlf
+            'errorNotes = errorNotes & "Extra Arcs: " & temp & crlf
+            wMass = wMass + temp2
+            sysMass = temp2
+            cost = cost + (temp2 * 3)
+            reportNotes = reportNotes + "Large Beam Cost: " & (temp2 * 3) & crlf
+                else
+            errorNotes = errorNotes & "Slot " & slotNo & ": Beam size must be &gt; 3" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": arcs &gt; 0 required for Class 4+ Battery" & crlf
+            end if
+            end if
+      case 2: if arcs <> "" and not isNull(arcs) then              'Class 3 Battery
+            if arcs > 0 then
+            if arcs < 7 then '1 arcs
+            temp = 0 'extra arcs
+                else if (6 < arcs) and(arcs < 13) then '2 arcss
+            temp = 1 'extra arcs
+                else if (12 < arcs) and(arcs < 19) then
+            temp = 2 'extra arcs
+                else if (18 < arcs) and(arcs < 25) then
+            temp = 3 'extra arcs
+                else if (24 < arcs) and(arcs < 31) then
+            temp = 4 'extra arcs
+                else
+            temp = 5 'extra arcs
+            end if end if end if end if end if
+                temp2 = amt * (4 + (temp))
+                wMass = wMass + temp2
+            sysMass = temp2
+            cost = cost + (temp2 * 3)
+            reportNotes = reportNotes + "B3 Cost: " & (temp2 * 3) & crlf
+            'errorNotes = errorNotes + "Slot " & slotNo & ": Class-4 mass:" & temp2 & " Arcs:" & arcs & crlf
+              else
+            errorNotes = errorNotes + "Slot " & slotNo & ": arcs > 0 required for Class 3 Battery" & crlf
+            end if
+            end if
+      case 3: if arcs <> "" and not isNull(arcs) then              'Class 2 Battery
+            temp = 0
+            if arcs > 0 then
+            if arcs < 13 then '1 or 2 arcs
+            temp = -1
+            errorNotes = errorNotes + "Slot " & slotNo & ": 3 or 6 arcss required for Class 2 Battery" & crlf
+            end if 
+                  if ((12 < arcs) and(arcs > 19)) then  '3 arcs
+            temp = 0
+            end if
+                  if ((18 < arcs) and(arcs > 31)) then '4 or 5 arcs
+            temp = -1
+            errorNotes = errorNotes + "Slot " & slotNo & ": 3 or 6 arcss required for Class 2 Battery" & crlf
+            end if
+                  if arcs = 31 then                     'all arcs
+            temp = 1 'extra set of arcss
+            end if 
+                  if (temp > -1) then
+            temp2 = amt * (2 + temp)
+            wMass = wMass + temp2
+            sysMass = temp2
+            cost = cost + (temp2 * 3)
+            reportNotes = reportNotes + "B2 Cost: " & (temp2 * 3) & crlf
+            end if
+                else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 or 6 arcss  required for Class 2 Battery" & crlf
+            end if
+              end if
+              'errorNotes = errorNotes & "Slot " & slotNo & "Class 2 mass:" & temp2 & crlf
+      case 4: if arcs <> "" and not isNull(arcs) then              'Class 1 Battery
+            if arcs > 0 then
+            if arcs < 31 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": All arcss required for Class 1 Battery." & crlf
+            end if 
+                wMass = wMass + amt
+                sysMass = amt
+            cost = cost + (amt * 3)
+            reportNotes = reportNotes + "B1 Cost: " & (amt * 3) & crlf
+              else
+            errorNotes = errorNotes + "Slot " & slotNo & ": All arcss required for Class 1 Battery" & crlf
+            end if
+            end if
+      case 5: if arcs <> "" and not isNull(arcs) then              'Salvo Missile Launcher
+            if arcs > 0 then
+            if ((12 < arcs) and(arcs < 25)) then '13-24 = 3 arcs 
+            sysMass = (amt * 3)
+            wMass = wMass + sysMass
+            cost = cost + (amt * 9)
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Launcher. (arc value=" & arcs & ")" & crlf
+            end if 
+                else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Launcher. (arc value=" & arcs & ")" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Launcher. (arc value=" & arcs & ")" & crlf
+            end if 
+              if bay <> "" and not isNull(arcs) then
+            if 0 > bay < 26 then
+            temp = checkSMMag(bay)
+                else
+            temp = 0
+            end if
+              else
+              temp = 0
+            end if
+              if temp = 0 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": The Bay must indicate the slot for the Salvo Missile Magazine." & crlf
+            end if
+      case 6: flag = 0
+            if ammo <> "" and not isNull(ammo) then           'Salvo Missile Magazine (Normal Salvos)
+            if ammo > 0 then
+            temp = ammo * 2
+            wMass = wMass + temp
+            sysmass = temp
+            cost = cost + (temp * 3)
+            flag = 1
+                else
+            flag = 0
+            end if
+              else
+              flag = 0
+            end if
+           if bay <> "" and not isNull(bay) then           '(ER Salvos)
+            if bay > 0 then
+            temp = bay * 3
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+            flag = 1
+                else
+            flag = flag + 0
+            end if
+              else
+              flag = flag + 0
+            end if
+          if flag = 0 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": Salvo Missile Magazines must have the number of Normal Salvos entered in the Ammo location or ER Salvos entered in the Bay Location." & crfl
+            end if
+          amt = amt + 0
+          if amt <> 1 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": Salvo Missile Magazines must be specified individually (1 x ...). (current amt=" & amt & ")" & crfl
+            end if
+      case 7: if arcs <> "" and not isNull(arcs) then              'Salvo Missile Rack
+            if arcs > 0 then
+            if ((12 < arcs) and(arcs < 25)) then '3 arcs
+            if notEmpty(bay) then
+            If bay <> 1 then
+            sysMass = (amt * 4)
+            wMass = wMass + sysMass  'std salvo
+                  else
+            sysMass = (amt * 5)
+            wMass = wMass + sysMass  'er salvo
+            end if
+                else
+              sysMass = (amt * 4)
+            wMass = wMass + sysMass  'std salvo
+            end if
+                cost = cost + (sysMass * 3)
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Rack" & crlf
+            end if
+            else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Rack" & crlf
+            end if
+          else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 3 arcss required for Salvo Missile Rack" & crlf
+            end if 
+      case 8: if arcs <> "" and not isNull(arcs) then      'Submunitions Pack
+            if 7 > arcs < 0 then
+            wMass = wMass + amt
+            sysMass = amt
+            cost = cost + (amt * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": 1 arcs required/maximum for Submunitions Pack" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 1 arcs required/maximum for Submunitions Pack" & crlf
+            end if
+      case 9: if arcs <> "" and not isNull(arcs) then      'Needle Beams
+            if 7 > arcs < 0 then
+            temp = amt * 2
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": 1 arcs required/maximum for Needle Beams" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": 1 arcs required/maximum for Needle Beams" & crlf
+            end if
+      case 10: if arcs <> "" and not isNull(arcs) then      'Pulse Torpedo Launcher
+            if 19 > arcs < 0 then
+            if arcs < 7 then
+            temp = 0 'extra arcss
+                  else if ((6 < arcs) and(arcs < 13)) then
+            temp = 1 'extra arcss
+                  else if ((12 < arcs)and(arcs < 19)) then
+            temp = 2
+            end if end if end if
+                  temp2 = amt * (4 + temp)
+                  wMass = wMass + temp2
+            sysMass = temp2
+            cost = cost + (temp2 * 3)
+            reportNotes = reportNotes + "P-Torp Cost: " & (temp2 * 3) & crlf
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": Pulse Torpedo have a minimum of 1 and a maximum of 3 arcss" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": Pulse Torpedo have a minimum of 1 and a maximum of 3 arcss" & crlf
+            end if
+      case 11: if arcs <> "" and not isNull(arcs) then      'Nova Cannon
+            if arcs = 1 then
+            temp = amt * 20
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": Forward arcs only for Nova Cannon" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": Forward arcs only for Nova Cannon" & crlf
+            end if
+      case 12: if arcs <> "" and not isNull(arcs) then      'Wave Gun
+            if arcs = 1 then
+            temp = amt * 12
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+            reportNotes = reportNotes + "Wave Gun Cost: " & (temp * 3) & crlf
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": Forward arcs only for Wave Gun" & crlf
+            end if
+              else
+              errorNotes = errorNotes + "Slot " & slotNo & ": Forward arcs only for Wave Gun" & crlf
+            end if
+      case 13: if arcs = "" or isNull(arcs) then      'Mine Layer
+            temp = amt * 2
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+              else
+            if arcs = 0 then
+            temp = amt * 2
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Mine Layer" & crlf
+            end if
+              end if
+              temp2 = checkAmmo(ammo)
+              if temp2 = 0 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": The number of mines must be specified in the Ammo location" & crlf
+              else
+            wMass = wMass + ammo
+            sysMass = ammo
+            cost = cost + (2 * ammo)
+            end if
+      case 14: if arcs <> "" and not isNull(arcs) then      'Mine Sweeper
+            if arcs = 0 then
+            temp = amt * 5
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Mine Sweeper" & crlf
+            end if
+              else
+              temp = amt * 5
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+            end if
+      case 15: if arcs <> "" and not isNull(arcs) then      'MT Missile
+            if arcs = 0 then
+            temp = amt * 2
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for MT Missile" & crlf
+            end if
+              else
+              temp = amt * 2
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+            end if
+      case 16: if arcs <> "" and not isNull(arcs) then      'Reflex Field
+            if arcs = 0 then
+            temp = amt * 10
+            temp2 = sMass * .10
+            if temp < temp2 then
+            temp = trueRound(temp2)
+            end if
+                    wMass = wMass + temp
+                    sysMass = temp
+            cost = cost + (temp * 6)
+            pers = pers + 10
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Reflex Field" & crlf
+            end if
+                else
+              temp = amt * 10
+            temp2 = sMass * .10
+            if temp < temp2 then
+            temp = trueRound(temp2)
+            end if
+                  wMass = wMass + temp
+                  sysMass = temp
+            cost = cost + (temp * 6)
+            pers = pers + 10
+            end if
+      case 17: if arcs <> "" and not isNull(arcs) then      'Cloaking Field
+            if arcs = 0 then
+            temp = amt * 2
+            temp2 = sMass * .10
+            if temp < temp2 then
+            temp = trueRound(temp2)
+            end if
+                    wMass = wMass + temp
+                    sysMass = temp
+            cost = cost + (temp * 10)
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Cloaking Field" & crlf
+            end if
+                else
+              temp = amt * 2
+            temp2 = sMass * .10
+            if temp < temp2 then
+            temp = trueRound(temp2)
+            end if
+                  wMass = wMass + temp
+                  sysMass = temp
+            cost = cost + (temp * 10)
+            end if
+        case 18: if arcs <> "" and not isNull(arcs) then      'Ortillery System
+            if arcs = 0 then
+            sysMass = (3 * amt)
+            wMass = wMass + sysMass
+            cost = cost + (9 * amt)
+                    else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Ortillery System" & crlf
+            end if
+                  else
+              sysMass = (3 * amt)
+            wMass = wMass + sysMass
+            cost = cost + (9 * amt)
+            end if
+        case 19: if arcs <> "" and not isNull(arcs) then      'Fighter Bay
+            if arcs = 0 then
+            sysMass = (9 * amt)
+            wMass = wMass + sysMass
+            cost = cost + (27 * amt)
+            reportNotes = reportNotes + "Fighter Bay Cost: " & (27 * amt) & crlf
+            costF = costF + (amt * 18)
+            end if
+                  else
+              sysMass = (9 * amt)
+            wMass = wMass + sysMass
+            cost = cost + (27 * amt)
+            reportNotes = reportNotes + "Fighter Bay Cost: " & (27 * amt) & crlf
+            costF = costF + (amt * 18)
+            end if
+        case 20: if arcs <> "" and not isNull(arcs) then      'Hanger Bay
+            if arcs = 0 then
+            if ammo <> "" or not isNull(ammmo) then
+            if ammo > 0 then
+            temp = trueRound(amt * ammo * 1.5)
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                        else
+            errorNotes = errorNotes + "Slot " & slotNo & ": The mass of the craft to be carried in the bay must be entered in the Ammo location" & crlf
+            end if
+                      else
+              errorNotes = errorNotes + "Slot " & slotNo & ": The mass of the craft to be carried in the bay must be entered in the Ammo location" & crlf
+            end if
+                    else
+              errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Hanger Bay" & crlf
+            end if
+                  else
+              if ammo <> "" or not isNull(ammmo) then
+            if ammo > 0 then
+            temp = trueRound(amt * ammo * 1.5)
+            wMass = wMass + temp
+            sysMass = temp
+            cost = cost + (temp * 3)
+                      else
+            errorNotes = errorNotes + "Slot " & slotNo & ": The mass of the craft to be carried in the bay must be entered in the Ammo location" & crlf
+            end if
+                    else
+              errorNotes = errorNotes + "Slot " & slotNo & ": The mass of the craft to be carried in the bay must be entered in the Ammo location" & crlf
+            end if
+                  end if
+        case 21: if arcs <> "" and not isNull(arcs) then      'Cargo/Passenger Space
+            if arcs = 0 then
+            if amt > 1 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": 1 cargo/passenger selection max. Place total cargo/passenger mass in Bay/Magazine Location" & crlf
+                  else
+            if bay < 1 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": Cargo/Passenger space must be greater than Zero. Place total cargo/passenger mass in Bay/Magazine Location" & crlf
+                    else
+            wMass = wMass + bay
+            sysmass = bay
+            end if
+                  'no cost
+                  end if
+                  if ammo <> "" then
+            if ammo > 0 then
+            errorNotes = errorNotes + "Slot " & slotNo & ": Place total cargo/passenger mass in Bay/Magazine Location"
+            end if
+                  end if
+                else
+                errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for Cargo/Passenger Space" & crlf
+            end if
+              else
+              wMass = wMass + amt
+            sysMass = amt
+            end if
+        case 22: if (not notEmpty(arcs)) or arcs = 0 then        'ECM Individual
+            wMass = wMass + 2
+            sysMass = 2
+            cost = cost + 20
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for ECM" & crlf
+            end if
+         case 23: if (not notEmpty(arcs)) or arcs = 0 then        'ECM Area
+            wMass = wMass + 3
+            sysMass = 3
+            cost = cost + 30
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": No arcss allowed for ECM" & crlf
+            end if
+         case 24: if arcs = 31 then                        'Ortillery
+            wMass = wMass + 3
+            sysMass = 3
+            cost = cost + 10
+                  else
+            errorNotes = errorNotes + "Slot " & slotNo & ": Ortillery must be All Arcs." & crlf
+            end if
+        end select
+            'errorNotes = errorNotes + reportNotes
+            end function
+
+function checkSMMag(bay)
+            dim temp
+            dim i, j
+            temp = 0
+            j = (bay * 5) + 27
+            if document.shipForm.elements(j + 1).value = 6 then 'salvo missile magazine
+            temp = 1
+            end if
+  checkSMMag = temp
+end function
+
+function checkAmmo(ammo)
+            dim temp
+            temp = 1
+            if ammo <> "" or not isNull(ammo) then
+            if ammo > 0 then
+            temp = 0
+            end if
+  end if
+end function
+          </script>
+
+
+
+          <div class="main" align="center">
+
+            <h3>FTSR type 2.5 Ship Designer (Human)</h3><br>
+            [Version 0.15h]<br>
+            <span class="s8">R'lyeh-able Products, Brian Bell</span>
+          </div>
+
+          <div class="main" align="center">
+            <hr>
+			<p>
+            This form uses VB Script. <br> It will only work on Edge in compatability mode or IE 9 or lower</p>
+            <p>You can save a design compatible with the archive using the <a href="#template">FTSR template</a></p>
+            <hr>
+            <!--<br />
+			For non-humans, select the correct species:
+			<a href="submit_kv.html">Kra'Vak</a>,
+			<a href="submit_ph.html">Phalon</a>,
+			<a href="submit_sv.html">Sa'Vasku</a>
+			<hr>-->
+          </div>
+
+
+          <form class="main" name="shipForm">
+            <input type="hidden" value=""><!-- elements(0) -->
+			<ul class="formLayout">
+			<label class="readOnly">Read-only fields</label>
+            <li><label>Ship Name:</label><input type="text" placeholder="Excalibur"><!-- elements(1) --> ex. Excalibur</li>
+            <li><label>Class:</label><input type="text" placeholder="Battledreadnought"><!-- elements(2) --> ex. Battledreadnought</li>
+            <li><label>Abbreviation:</label><input type="text" size="5" placeholder="BDN"><!-- elements(3) --> ex. BDN <a href="abbrev.html" target="_blank">Std. Abreviations</a></li>
+            <li><label>Designer:</label><input type="text"><!-- elements(4) --> ex. Jon Tuffley</li>
+            <li><label>E-mail Address:</label><input type="text"><!-- elements(5) --></li>
+            <li><label>Tech:</label><select><option value="1">Human</option></select><!-- elements(6) --> Other race: <input type="text" readonly class="readOnly"><!-- elements(7) --></li>
+            <li><label>Rules Edition:</label><input type="text" value="FB" size="3" readonly class="readOnly"><!-- elements(8) --></li>
+            <li><label>Gov Abbreviation:</label><input type="text" size="4" ><!-- elements(9) --> ex. NAC, ~PRM (~ Unofficial)</li>
+            <li><label>Full Name of Gov:</label><input type="text" name="elements(10)" ><!-- elements(10) --> (Optional if Official Government)
+            <a href="gov.html" target="_blank">List by Government</a>&nbsp;&nbsp;&nbsp;
+            <a href="nationaldesign.html" target="_blank">Lookup Design Philosophies</a></li>
+            <li><label>Mass:</label><input type="text" size="4" ><!-- elements(11) --></li>
+            <li><label>Cost:</label><input type="text" size="5" readonly class="readOnly"><!-- elements(12) -->
+            <label>Std. Fighters:</label><input type="text" size="5" readonly class="readOnly"><!-- elements(13) --></li>
+            <li><label>Hull boxes:</label><input type="text" size="4" ><!-- elements(14)--> 
+              <select>
+                <option value="1">Military Warship</option>
+                <option value="2">Civilian/Merchant/Auxiliary</option>
+              </select><!-- elements(15) -->
+            </li>
+            <li><label>Streamlining:</label><select>
+              <!-- elements(16) -->
+              <option value="1">None</option>
+              <option value="2">Partial</option>
+              <option value="3">Full</option>
+            </select><br></li>
+            <li><label>FTL:</label><select>
+              <!-- elements(17) -->
+              <option value="0">None</option>
+              <option selected="" value="1">Std.</option>
+              <option value="2">Tug</option>
+            </select>&nbsp;&nbsp;&nbsp;
+            <input type="text" size="4"> (Mass to tow if Tug)</li>
+            <li><label>Main Drive:</label><input type="text" size="2"><!-- elements(19) --></li>
+            <li><label>Armor:</label><input type="text" size="2"><!-- elements(20) --></li>
+            <li><label>Damage:</label><input type="text" size="3" readonly class="readOnly"><!-- elements(21) -->&nbsp;&nbsp;
+            <input type="text" size="2" readonly class="readOnly"><!-- elements(22) -->/
+            <input type="text" size="2" readonly class="readOnly"><!-- elements(23) -->/
+            <input type="text" size="2" readonly class="readOnly"><!-- elements(24) -->/
+            <input type="text" size="2" readonly class="readOnly"> *<!-- elements(25) --></li>
+            <li><label>Crew:</label><input type="text" size="2" readonly class="readOnly"><!-- elements(26) --> *</li>
+            <li><label>Sensors:</label> 
+			<select>
+              <option value="0" selected="">Std</option>
+              <option value="1">Enhanced</option>
+              <option value="2">Superior</option>
+            </select><!-- elements(27) --></li>
+            <li><label>Systems:</label>
+				<ul class="innerFormLayout" >
+					<li><input type="text" size="2"><!-- elements(28) --> x Screens</li>
+					<li><input type="text" size="2"><!-- elements(29) --> x FCS</li>
+					<li><input type="text" size="2"><!-- elements(30) --> x ADFC</li>
+					<li><input type="text" size="2"><!-- elements(31) --> x PDS</li>
+				</ul>
+			</li>
+			</ul>
+
+            <table class="systems" width="100%">
+              <tbody>
+                <tr>
+                  <td>&nbsp;</td>
+                  <th>Number</th>
+                  <td>&nbsp;</td>
+                  <th>System</th>
+                  <th>Arcs</th>
+                  <th>Ammo/Class</th>
+                  <th>Bay</th>
+                </tr>
+                <!-- Slots
+				Amt -       element (31) [slot * 5 + 27]
+				component - element (32) [slot * 5 + 28]
+				arcs  -     element (33) [slot * 5 + 29]
+				ammo -      element (34) [slot * 5 + 30]
+				bay -       element (35) [slot * 5 + 31]
+				-->
+
+                <script language="VBScript">
+
+                        dim i
+                  for i = 1 to 15
+				  document.write "<tr><td align='right'>"
+                  document.write i & ")</td><td><input type='text' size='2'></td><td>x</td>"
+                  document.write "<td><select>"     '* System                         
+                  document.write "<option value='0'></option>"
+                  document.write "<option value='1'>Larger Beam (enter size in Ammo)</option>"
+                  document.write "<option value='2'>Class 3 Beam</option>"
+                  document.write "<option value='3'>Class 2 Beam</option>"
+                  document.write "<option value='4'>Class 1 Beam</option>"
+                  document.write "<option value='5'>Salvo Missile Launcher</option>"
+                  document.write "<option value='6'>Salvo Missile Magazine</option>"
+                  document.write "<option value='7'>Salvo Missile Rack</option>"
+                  document.write "<option value='8'>Submunitions Pack</option>"
+                  document.write "<option value='9'>Needle Beam</option>"
+                  document.write "<option value='10'>Pulse Torpedo Launcher</option>"
+                  document.write "<option value='11'>Nova Cannon</option>"
+                  document.write "<option value='12'>Wave Gun</option>"
+                  document.write "<option value='13'>Minelayer</option>"
+                  document.write "<option value='14'>Minesweeper</option>"
+                  document.write "<option value='15'>MT Missile</option>"
+                  document.write "<option value='16'>Reflex Field</option>"
+                  document.write "<option value='17'>Cloaking Field</option>"
+                  document.write "<option value='18'>Ortillery System</option>"
+                  document.write "<option value='19'>Fighter Bay</option>"
+                  document.write "<option value='20'>Hanger Bay</option>"
+                  document.write "<option value='21'>Cargo/Passenger Space</option>"
+                  document.write "<option value='22'>ECM - Individual</option>"
+                  document.write "<option value='23'>ECM - Area</option>"
+                  document.write "<option value='24'>Ortillery</option>"
+                  document.write "</select></td>"
+                  document.write "<td><select> "  '* Arcs                        
+                  document.write "<option value='0'></option>"
+                  document.write "<option value='1'>F</option>"
+                  document.write "<option value='2'>FS</option>"
+                  document.write "<option value='3'>AS</option>"
+                  document.write "<option value='4'>A</option>"
+                  document.write "<option value='5'>AP</option>"
+                  document.write "<option value='6'>FP</option>"
+                  document.write "<option value='7'>F, FS</option>"
+                  document.write "<option value='8'>FS, AS</option>"
+                  document.write "<option value='9'>AS, A</option>"
+                  document.write "<option value='10'>A, AP</option>"
+                  document.write "<option value='11'>AP, FP</option>"
+                  document.write "<option value='12'>FP, F</option>"
+                  document.write "<option value='13'>FP, F, FS</option>"
+                  document.write "<option value='14'>F, FS, AS</option>"
+                  document.write "<option value='15'>FS, AS, A</option>"
+                  document.write "<option value='16'>AS, A, AP</option>"
+                  document.write "<option value='17'>A, AP, FP</option>"
+                  document.write "<option value='18'>AP, FP, F</option>"
+                  document.write "<option value='19'>FP, F, FS, AS</option>"
+                  document.write "<option value='20'>F, FS, AS, A</option>"
+                  document.write "<option value='21'>FS, AS, A, AP</option>"
+                  document.write "<option value='22'>AS, A, AP, FP</option>"
+                  document.write "<option value='23'>A, AP, FP, F</option>"
+                  document.write "<option value='24'>AP, FP, F, FS</option>"
+                  document.write "<option value='25'>AP, FP, F, FS, AS</option>"
+                  document.write "<option value='26'>FP, F, FS, AS, A</option>"
+                  document.write "<option value='27'>F, FS, AS, A, AP</option>"
+                  document.write "<option value='28'>FS, AS, A, AP, FP</option>"
+                  document.write "<option value='29'>AS, A, AP, FP, F</option>"
+                  document.write "<option value='30'>A, AP, FP, F, FS</option>"
+                  document.write "<option value='31'>All</option></select></td>"
+                  document.write "<td><input type='text' size='2'></td>"
+                  document.write "<td><input type='text' size='2'></td>"
+                  next
+                </script>
+              </tbody>
+            </table>
+			<ul class="formLayout">
+              <li><label>Notes:</label><br>
+              <textarea name="txaNotes" cols="60" rows="5"></textarea><!-- elements(157) --></li>
+              <li><label>Error Notes:</label><br>
+              <textarea name="txaErrorNotes" cols="60" rows="10" readonly class="readOnly error"></textarea><!-- elements(158) --></li>
+              <li><label>Mass Used:</label> <input type="text" size="4" readonly class="readOnly"><!-- elements(159) --></li>
+              <li><label>Mass Left:</label> <input type="text" size="5" readonly class="readOnly"><!-- elements(160) --></li>
+              
+			</ul>
+            <table class="actions">
+              <tbody>
+                <tr>
+				  <td>
+                    <input type="button" name="quickFill" value="Quick Fill" >
+                  </td>
+                  <td>
+                    <input type="button" name="checkShip" value="Check Ship" >
+                  </td>
+                  <td>
+                    <input type="button" name="lowMass" value="Min. Mass" >
+                  </td>
+                  <td>
+                    <input type="button" name="submitShip" value="Summary" >
+                  </td>
+                  <td>
+                    <input type="Reset">
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+            <br>
+          </form>
+
+          <script language="VBScript">
+              < !--
+              sub writeErrors
+
+            end sub
+//-->
+          </script>
+
+          <div align="center">
+            <hr><h3>FTSR Template</h3>
+          </div>
+
+          <a name="template"></a>
+          <pre>
+		  <b>Excalibur class Battledreadnought</b>
+		  Jon Tuffley  e-mailaddr@domain.ext
+		  Tech: Human (Kra'Vak, Sa'Vasku, etc.) (FB)
+		  Govt: --- (ESU,FSE,NAC,NSL, ~PRM, etc.)&nbsp; <a href="gov.html" target="_blank">List by Government</a>&nbsp;&nbsp;&nbsp;<a href="nationaldesign.html" target="_blank">Lookup Design Philosophies</a>
+		  Mass: 140
+		  Cost: 472  (490)
+		  Clas: Battledreadnought (BDN)  <a href="abbrev.html" target="_blank">Std Abreviations</a>
+		  Strm: None (Partial, Full)
+		  FTL:  Std (None, Tender, Tug)
+		  MD:   4 
+		  Armr: 7
+		  Hull: 42 (Military)
+		  Damg: 11/11/10/10
+		  Crew: 7
+		  Sens: Std (Enhanced, Superior)
+		  Systems:
+		  1 x Screen
+		  3 x FCS
+		  3 x PDS
+		  1 x Pulse Torpedo (F)
+		  1 x Class-3 beam (AP,FP,F)
+		  1 x Class-3 beam (FP,F,FS)
+		  1 x Class-3 beam (F,FS,AS)
+		  1 x Class-2 beam (All)
+		  2 x Class-1 beam (All)
+		  1 x Fighter Bay
+		  Notes: 
+		  Official Design.Full Thrust Fleet Book Volume 1, page 18
+		</pre>
+          
+        <!-- End Page Content -->
+        <!-- main page is in this area -->
+          
+         </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
